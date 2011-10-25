@@ -11,7 +11,7 @@ namespace Luces
     {
         private IDeviceManager _deviceManager;
 
-        public IEnumerable<ILight> Lights { get; set; }
+        public IEnumerable<ILight> Lights { get; private set; }
 
         public LucesCore(IDeviceManager deviceManager)
         {
@@ -21,6 +21,8 @@ namespace Luces
         public void Initialise()
         {
             var devicePaths = _deviceManager.FindDevices(DeviceGuid.HID, "0FC5", "B080");
+
+            Lights = devicePaths.Select(dp => new Light());
         }
     }
 }
