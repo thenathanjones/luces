@@ -1,6 +1,6 @@
 ﻿namespace Luces
 {
-    partial class Service1
+    partial class LucesService
     {
         /// <summary> 
         /// Required designer variable.

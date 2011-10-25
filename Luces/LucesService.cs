@@ -9,9 +9,9 @@ using System.Text;
 
 namespace Luces
 {
-    public partial class Service1 : ServiceBase
+    public partial class LucesService : ServiceBase
     {
-        public Service1()
+        public LucesService()
         {
             InitializeComponent();
         }

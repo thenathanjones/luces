@@ -16,7 +16,7 @@ namespace Luces
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
 			{ 
-				new Service1() 
+				new LucesService() 
 			};
             ServiceBase.Run(ServicesToRun);
         }
