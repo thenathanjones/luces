@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Burro">
-      <HintPath>..\packages\Burro.0.1\lib\net40\Burro.dll</HintPath>
+    <Reference Include="Burro, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Burro.0.1.1\lib\net40\Burro.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Client\Ninject.dll</HintPath>
@@ -51,11 +51,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet.Core">
-      <HintPath>..\packages\YamlDotNet.Core.1.1.7\lib\YamlDotNet.Core.dll</HintPath>
+    <Reference Include="YamlDotNet.Core, Version=0.2.4316.26586, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\YamlDotNet.Core.1.1.8\lib\YamlDotNet.Core.dll</HintPath>
     </Reference>
-    <Reference Include="YamlDotNet.RepresentationModel">
-      <HintPath>..\packages\YamlDotNet.RepresentationModel.1.1.7\lib\YamlDotNet.RepresentationModel.dll</HintPath>
+    <Reference Include="YamlDotNet.RepresentationModel, Version=0.2.4316.26586, Culture=neutral, PublicKeyToken=2b53052c5884d7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\YamlDotNet.RepresentationModel.1.1.8\lib\YamlDotNet.RepresentationModel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

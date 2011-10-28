@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Ninject;
 using NUSB.Manager;
 using Luces;
+using Burro.Util;
 
 namespace Luces.Tests
 {
@@ -42,6 +43,17 @@ namespace Luces.Tests
             core.Initialise();
             Assert.AreEqual(2, core.Lights.Count());
             Assert.IsInstanceOf<ILight>(core.Lights.First());
+        }
+
+        [Test]
+        public void InitialisationStartsParser()
+        {
+            var timer = new Mock<ITimer>();
+            _kernel.Bind<ITimer>().ToConstant(timer);
+
+
+
+            var core = _kernel.Get<LucesCore>();
         }
     }
 }

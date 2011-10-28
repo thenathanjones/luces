@@ -1,4 +1,4 @@
-*/obj*
-*/bin*
-*packages/
-*Resharper*
+*/obj
+*/bin
+*ReSharper*
+packages/*
