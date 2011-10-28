@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Ninject;
 using NUSB.Manager;
 using Luces;
+using Burro;
 using Burro.Util;
 
 namespace Luces.Tests
@@ -16,6 +17,7 @@ namespace Luces.Tests
     {
         private IKernel _kernel;
         private Mock<IDeviceManager> _deviceManager;
+        private Mock<IBurroCore> _burro;
 
         [SetUp]
         public void Setup()
@@ -23,6 +25,8 @@ namespace Luces.Tests
             _kernel = new StandardKernel();
             _deviceManager = new Mock<IDeviceManager>();
             _kernel.Bind<IDeviceManager>().ToConstant(_deviceManager.Object);
+            _burro = new Mock<IBurroCore>();
+            _kernel.Bind<IBurroCore>().ToConstant(_burro.Object);
         }
 
         [Test]
@@ -46,14 +50,19 @@ namespace Luces.Tests
         }
 
         [Test]
-        public void InitialisationStartsParser()
+        public void InitialisationStartsParserWithDefaultFile()
         {
-            var timer = new Mock<ITimer>();
-            _kernel.Bind<ITimer>().ToConstant(timer);
-
-
-
             var core = _kernel.Get<LucesCore>();
+            core.Initialise();
+            _burro.Verify(b => b.Initialise("luces.yml"), Times.Once());
+        }
+
+        [Test]
+        public void InitialisationAllowsFilePassedIn()
+        {
+            var core = _kernel.Get<LucesCore>();
+            core.Initialise("file2.yml");
+            _burro.Verify(b => b.Initialise("file2.yml"), Times.Once());
         }
     }
 }
