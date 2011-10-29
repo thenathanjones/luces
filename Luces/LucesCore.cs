@@ -35,12 +35,28 @@ namespace Luces
         {
             InitialiseLights();
 
-            foreach (var light in Lights)
-            {
-                light.Unknown();
-            }
-
             InitialiseParser(configFile);
+
+            RegisterForUpdates();
+        }
+
+        private void RegisterForUpdates()
+        {
+            foreach (var buildServer in _parser.BuildServers)
+            {
+                buildServer.PipelinesUpdated += HandlePipelineUpdate;
+            }
+        }
+
+        private void HandlePipelineUpdate(IEnumerable<PipelineReport> update)
+        {
+            if (update.All(pr => pr.BuildState == BuildState.Success))
+            {
+                foreach (var light in Lights)
+                {
+                    light.Success();
+                }
+            }
         }
 
         private void InitialiseParser(string configFile)
@@ -50,8 +66,13 @@ namespace Luces
 
         private void InitialiseLights()
         {
-            var devicePaths = _deviceManager.FindDevices(DeviceGuid.HID, "0FC5", "B080"); 
+            var devicePaths = _deviceManager.FindDevices(DeviceGuid.HID, "", ""); 
             Lights = devicePaths.Select(dp => _kernel.Get<ILight>());
+
+            foreach (var light in Lights)
+            {
+                light.Unknown();
+            }
         }
     }
 }

@@ -11,5 +11,10 @@ namespace Luces
         {
             
         }
+
+        public void Success()
+        {
+
+        }
     }
 }

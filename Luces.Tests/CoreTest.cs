@@ -10,6 +10,7 @@ using Luces;
 using Burro;
 using Burro.Util;
 using Burro.BuildServers;
+using Burro.Parsers;
 
 namespace Luces.Tests
 {
@@ -20,6 +21,11 @@ namespace Luces.Tests
         private Mock<IDeviceManager> _deviceManager;
         private Mock<IBurroCore> _burro;
         private Mock<ILight> _light;
+
+        private PipelineReport SUCCESSFUL_IDLE_PIPELINE = new PipelineReport() {BuildState = BuildState.Success, Activity = Activity.Idle};
+        private PipelineReport FAILED_IDLE_PIPELINE = new PipelineReport() {BuildState = BuildState.Failure, Activity = Activity.Idle};
+        private PipelineReport SUCCESSFUL_BUILDING_PIPELINE = new PipelineReport() {BuildState = BuildState.Success, Activity = Activity.Busy};
+        private PipelineReport FAILED_BUILDING_PIPELINE = new PipelineReport() {BuildState = BuildState.Failure, Activity = Activity.Busy};
 
         [SetUp]
         public void Setup()
@@ -82,10 +88,11 @@ namespace Luces.Tests
         }
 
         [Test]
-        // TODO
-        public void ChangesToBuildPipelinesRaiseEvents()
+        public void ChangesToAllBuildPipelinesAlterLights()
         {
             var core = _kernel.Get<LucesCore>();
+
+            _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> { "blah" });
 
             var bs1 = new Mock<IBuildServer>();
             var bs2 = new Mock<IBuildServer>();
@@ -95,7 +102,10 @@ namespace Luces.Tests
 
             core.Initialise();
 
-
+            bs1.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { SUCCESSFUL_IDLE_PIPELINE });
+            _light.Verify(l => l.Success(), Times.Once());
+            bs2.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { SUCCESSFUL_IDLE_PIPELINE });
+            _light.Verify(l => l.Success(), Times.Exactly(2));
         }
     }
 }

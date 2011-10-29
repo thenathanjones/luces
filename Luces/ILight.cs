@@ -8,5 +8,7 @@ namespace Luces
     public interface ILight
     {
         void Unknown();
+
+        void Success();
     }
 }
