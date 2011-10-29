@@ -6,6 +6,7 @@ using NUSB.Interop;
 using NUSB.Manager;
 using Burro;
 using Ninject;
+using Burro.Parsers;
 
 namespace Luces
 {
@@ -40,25 +41,6 @@ namespace Luces
             RegisterForUpdates();
         }
 
-        private void RegisterForUpdates()
-        {
-            foreach (var buildServer in _parser.BuildServers)
-            {
-                buildServer.PipelinesUpdated += HandlePipelineUpdate;
-            }
-        }
-
-        private void HandlePipelineUpdate(IEnumerable<PipelineReport> update)
-        {
-            if (update.All(pr => pr.BuildState == BuildState.Success))
-            {
-                foreach (var light in Lights)
-                {
-                    light.Success();
-                }
-            }
-        }
-
         private void InitialiseParser(string configFile)
         {
             _parser.Initialise(configFile);
@@ -72,6 +54,47 @@ namespace Luces
             foreach (var light in Lights)
             {
                 light.Unknown();
+            }
+        }
+
+        private void RegisterForUpdates()
+        {
+            foreach (var buildServer in _parser.BuildServers)
+            {
+                buildServer.PipelinesUpdated += HandlePipelineUpdate;
+            }
+        }
+
+        private void HandlePipelineUpdate(IEnumerable<PipelineReport> update)
+        {
+            if (update.All(pr => pr.BuildState == BuildState.Success))
+            {
+                BuildsSuccessful(update);
+            }
+            else
+            {
+                foreach (var light in Lights)
+                {
+                    light.Failure();
+                }
+            }
+        }
+
+        private void BuildsSuccessful(IEnumerable<PipelineReport> update)
+        {
+            if (update.Any(pr => pr.Activity == Activity.Busy))
+            {
+                foreach (var light in Lights)
+                {
+                    light.Building();
+                }
+            }
+            else
+            {
+                foreach (var light in Lights)
+                {
+                    light.Success();
+                }
             }
         }
     }

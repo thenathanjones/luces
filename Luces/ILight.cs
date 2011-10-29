@@ -10,5 +10,9 @@ namespace Luces
         void Unknown();
 
         void Success();
+
+        void Building();
+
+        object Failure();
     }
 }

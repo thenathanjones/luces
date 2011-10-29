@@ -107,5 +107,53 @@ namespace Luces.Tests
             bs2.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { SUCCESSFUL_IDLE_PIPELINE });
             _light.Verify(l => l.Success(), Times.Exactly(2));
         }
+
+        [Test]
+        public void SuccessfulBuilds()
+        {
+            var core = _kernel.Get<LucesCore>();
+
+            _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> { "blah" });
+
+            var bs1 = new Mock<IBuildServer>();
+            var bs2 = new Mock<IBuildServer>();
+            var buildServers = new List<Mock<IBuildServer>>() { bs1, bs2 };
+
+            _burro.Setup(b => b.BuildServers).Returns(new List<IBuildServer>(buildServers.Select(bs => bs.Object)));
+
+            core.Initialise();
+
+            bs1.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { SUCCESSFUL_BUILDING_PIPELINE });
+            _light.Verify(l => l.Success(), Times.Never());
+            _light.Verify(l => l.Building(), Times.Once());
+            bs1.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { SUCCESSFUL_IDLE_PIPELINE });
+            _light.Verify(l => l.Building(), Times.Once());
+            _light.Verify(l => l.Success(), Times.Once());
+        }
+
+        [Test]
+        public void FailedBuilds()
+        {
+            var core = _kernel.Get<LucesCore>();
+
+            _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> { "blah" });
+
+            var bs1 = new Mock<IBuildServer>();
+            var bs2 = new Mock<IBuildServer>();
+            var buildServers = new List<Mock<IBuildServer>>() { bs1, bs2 };
+
+            _burro.Setup(b => b.BuildServers).Returns(new List<IBuildServer>(buildServers.Select(bs => bs.Object)));
+
+            core.Initialise();
+
+            bs1.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { FAILED_IDLE_PIPELINE });
+            _light.Verify(l => l.Success(), Times.Never());
+            _light.Verify(l => l.Building(), Times.Never());
+            _light.Verify(l => l.Failure(), Times.Once());
+            bs1.Raise(bs => bs.PipelinesUpdated += null, new List<PipelineReport>() { FAILED_BUILDING_PIPELINE });
+            _light.Verify(l => l.Building(), Times.Never());
+            _light.Verify(l => l.Success(), Times.Never());
+            _light.Verify(l => l.Failure(), Times.Exactly(2));
+        }
     }
 }

@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ILight.cs" />
-    <Compile Include="Light.cs" />
     <Compile Include="LightConstants.cs" />
     <Compile Include="LucesCore.cs" />
     <Compile Include="LucesService.cs">
