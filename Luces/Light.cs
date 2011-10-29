@@ -7,5 +7,9 @@ namespace Luces
 {
     public class Light : ILight
     {
+        public void Unknown()
+        {
+            
+        }
     }
 }

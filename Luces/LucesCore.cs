@@ -5,19 +5,23 @@ using System.Text;
 using NUSB.Interop;
 using NUSB.Manager;
 using Burro;
+using Ninject;
 
 namespace Luces
 {
     public class LucesCore
     {
+        private IKernel _kernel;
+
         private IDeviceManager _deviceManager;
 
         private IBurroCore _parser;
 
         public IEnumerable<ILight> Lights { get; private set; }
 
-        public LucesCore(IDeviceManager deviceManager, IBurroCore parser)
+        public LucesCore(IKernel kernel, IDeviceManager deviceManager, IBurroCore parser)
         {
+            _kernel = kernel;
             _deviceManager = deviceManager;
             _parser = parser;
         }
@@ -31,6 +35,11 @@ namespace Luces
         {
             InitialiseLights();
 
+            foreach (var light in Lights)
+            {
+                light.Unknown();
+            }
+
             InitialiseParser(configFile);
         }
 
@@ -42,7 +51,7 @@ namespace Luces
         private void InitialiseLights()
         {
             var devicePaths = _deviceManager.FindDevices(DeviceGuid.HID, "0FC5", "B080"); 
-            Lights = devicePaths.Select(dp => new Light());
+            Lights = devicePaths.Select(dp => _kernel.Get<ILight>());
         }
     }
 }

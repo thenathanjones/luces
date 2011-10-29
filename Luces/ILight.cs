@@ -7,5 +7,6 @@ namespace Luces
 {
     public interface ILight
     {
+        void Unknown();
     }
 }
