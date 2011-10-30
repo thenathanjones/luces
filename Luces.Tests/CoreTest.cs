@@ -7,10 +7,13 @@ using NUnit.Framework;
 using Ninject;
 using NUSB.Manager;
 using Luces;
+using Luces.Lights;
 using Burro;
 using Burro.Util;
 using Burro.BuildServers;
 using Burro.Parsers;
+using System.Collections;
+using Luces.Lights;
 
 namespace Luces.Tests
 {
@@ -37,6 +40,9 @@ namespace Luces.Tests
             _kernel.Bind<IBurroCore>().ToConstant(_burro.Object);
             _light = new Mock<ILight>();
             _kernel.Bind<ILight>().ToConstant(_light.Object);
+
+            LightConstants.KnownLightTypes.Clear();
+            LightConstants.KnownLightTypes.Add(new LightConfig() { Name = "I" });
         }
 
         [Test]
@@ -53,7 +59,7 @@ namespace Luces.Tests
             _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> {"blah", "blah1"});
 
             var core = _kernel.Get<LucesCore>();
-            Assert.IsNull(core.Lights);
+            Assert.IsEmpty((ICollection)core.Lights);
             core.Initialise();
             Assert.AreEqual(2, core.Lights.Count());
             Assert.IsInstanceOf<ILight>(core.Lights.First());
@@ -154,6 +160,20 @@ namespace Luces.Tests
             _light.Verify(l => l.Building(), Times.Never());
             _light.Verify(l => l.Success(), Times.Never());
             _light.Verify(l => l.Failure(), Times.Exactly(2));
+        }
+
+        [Test]
+        public void LoadsLightsFromConfig()
+        {
+            LightConstants.KnownLightTypes.Clear();
+            LightConstants.KnownLightTypes.Add(new LightConfig() { Name = "Test" });
+            _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> { "blah" });
+
+            var core = _kernel.Get<LucesCore>();
+            core.Initialise();
+
+            Assert.AreEqual(1, core.Lights.Count());
+            Assert.IsInstanceOf<TestLight>(core.Lights.First());
         }
     }
 }
