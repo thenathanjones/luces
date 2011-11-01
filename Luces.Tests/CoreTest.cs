@@ -93,6 +93,16 @@ namespace Luces.Tests
         }
 
         [Test]
+        public void InitialiseStartsMonitoring()
+        {
+            var core = _kernel.Get<LucesCore>();
+
+            core.Initialise();
+
+            _burro.Verify(b => b.StartMonitoring(), Times.Once());
+        }
+
+        [Test]
         public void ChangesToAllBuildPipelinesAlterLights()
         {
             var core = _kernel.Get<LucesCore>();
