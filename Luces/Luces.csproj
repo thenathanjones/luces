@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AF810199-7863-41BE-BEDB-41A84617D564}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Luces</RootNamespace>
     <AssemblyName>Luces</AssemblyName>
@@ -32,6 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Burro, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -63,13 +66,9 @@
     <Compile Include="Lights\ILight.cs" />
     <Compile Include="LightConstants.cs" />
     <Compile Include="LucesCore.cs" />
-    <Compile Include="LucesService.cs">
+    <Compile Include="Program.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="LucesService.Designer.cs">
-      <DependentUpon>LucesService.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,11 @@ namespace Luces.Lights
 {
     public class TestLight : ILight
     {
+        public void Initialise(string devicePath)
+        {
+            
+        }
+
         public void Unknown()
         {
             
@@ -27,5 +32,6 @@ namespace Luces.Lights
         {
             
         }
+
     }
 }

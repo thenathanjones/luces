@@ -13,7 +13,6 @@ using Burro.Util;
 using Burro.BuildServers;
 using Burro.Parsers;
 using System.Collections;
-using Luces.Lights;
 
 namespace Luces.Tests
 {

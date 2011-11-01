@@ -14,5 +14,7 @@ namespace Luces.Lights
         void Building();
 
         void Failure();
+
+        void Initialise(string devicePath);
     }
 }

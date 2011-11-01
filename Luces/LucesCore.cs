@@ -8,6 +8,7 @@ using Burro;
 using Ninject;
 using Burro.Parsers;
 using Luces.Lights;
+using NUSB.Controller;
 
 namespace Luces
 {
@@ -71,9 +72,11 @@ namespace Luces
             var deviceClassType = AppDomain.CurrentDomain.GetAssemblies().AsEnumerable().SelectMany(a => a.GetTypes()).Single(t => t.FullName == deviceClassName);
 
             var devicePaths = _deviceManager.FindDevices(config.Guid, config.VendorId, config.ProductId);
-            foreach (var device in devicePaths)
+            foreach (var devicePath in devicePaths)
             {
-                _lights.Add((ILight)_kernel.Get(deviceClassType));
+                var light = (ILight)_kernel.Get(deviceClassType);
+                light.Initialise(devicePath);
+                _lights.Add(light);
             }
         }
 
@@ -91,6 +94,8 @@ namespace Luces
             {
                 buildServer.PipelinesUpdated += HandlePipelineUpdate;
             }
+
+            _parser.StartMonitoring();
         }
 
         private void HandlePipelineUpdate(IEnumerable<PipelineReport> update)
