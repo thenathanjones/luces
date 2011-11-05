@@ -78,5 +78,14 @@ namespace Luces
 
             _core.Shutdown();
         }
+
+        private void InitializeComponent()
+        {
+            // 
+            // Program
+            // 
+            this.ServiceName = "Luces";
+
+        }
     }
 }
