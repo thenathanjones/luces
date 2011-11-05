@@ -60,8 +60,10 @@ namespace Luces
             if (!File.Exists(configPath))
             {
                 var resourceAssembly = Assembly.GetExecutingAssembly();
-                var defaultConfig = resourceAssembly.GetManifestResourceStream("Luces.luces.yml");
+                var defaultConfig = resourceAssembly.GetManifestResourceStream("Luces.Config.luces.yml");
                 WriteStreamToFile(defaultConfig, configPath);
+
+                throw new FileLoadException("No config file found.  Put default at " + configPath);
             }
         }
 
