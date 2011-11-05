@@ -69,7 +69,7 @@ namespace Luces.Tests
         {
             var core = _kernel.Get<LucesCore>();
             core.Initialise();
-            _burro.Verify(b => b.Initialise("luces.yml"), Times.Once());
+            _burro.Verify(b => b.Initialise("./luces.yml"), Times.Once());
         }
 
         [Test]
@@ -186,13 +186,17 @@ namespace Luces.Tests
         }
 
         [Test]
-        public void ShutdownDisconnectsLights()
+        public void ShutdownDisablesAndDisconnectsLights()
         {
+            _deviceManager.Setup(dm => dm.FindDevices(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new List<string> { "blah" });
+
             var core = _kernel.Get<LucesCore>();
             core.Initialise();
 
+            _light.Verify(l => l.Off(), Times.Never());
             _light.Verify(l => l.Disconnect(), Times.Never());
             core.Shutdown();
+            _light.Verify(l => l.Off(), Times.Once());
             _light.Verify(l => l.Disconnect(), Times.Once());
         }
     }

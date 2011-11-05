@@ -37,5 +37,11 @@ namespace Luces.Lights
         {
             
         }
+
+
+        public void Off()
+        {
+            
+        }
     }
 }

@@ -39,7 +39,16 @@ namespace Luces
 
         public void Initialise()
         {
-            Initialise("luces.yml");
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            var baseDir = ".";
+
+            if (assembly != null)
+            {
+                baseDir = System.IO.Path.GetDirectoryName(assembly.Location);
+            }
+            var configPath = baseDir + "/luces.yml";
+
+            Initialise(configPath);
         }
 
         public void Initialise(string configFile)
@@ -135,6 +144,7 @@ namespace Luces
         {
             foreach (var light in Lights)
             {
+                light.Off();
                 light.Disconnect();
             }
         }
