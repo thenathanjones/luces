@@ -1,8 +1,11 @@
 Why do this?
+============
 Borne out of frustration from trying to get blinky (which I truly love the simplicity of) running with libusb on Windows.  I figured a pure .NET version might be simpler and gave me something to code.
 
 Surely this exists?
+===================
 It does, it's called blinky.  I'm lazy though, and gave up quickly after having trouble getting it to work on Windows.  By all means though, on a UNIX-y platform, use blinky, it's great.
 
 How do I use this?
+==================
 I'll put some examples up as things progress, for now you'll just have to work it out yourself.
