@@ -50,6 +50,11 @@ namespace Luces.Lights
             ChangeColor(LightColor.Red);
         }
 
+        public void Off()
+        {
+            SetColor(LightColor.Off);
+        }
+
         public void ChangeColor(LightColor color)
         {
             if (color != _lastColor)
