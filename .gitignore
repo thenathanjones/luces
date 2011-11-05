@@ -6,3 +6,4 @@ packages/*
 *.exe
 */Release
 */Debug
+*.DS_Store*
