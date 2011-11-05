@@ -39,6 +39,8 @@
             // 
             // serviceInstaller1
             // 
+            this.serviceInstaller1.Description = "A .NET Windows service for quickly getting a build light going with a build serve" +
+                "r";
             this.serviceInstaller1.ServiceName = "Luces";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             this.serviceInstaller1.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.serviceInstaller1_AfterInstall);

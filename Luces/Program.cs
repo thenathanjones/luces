@@ -9,6 +9,7 @@ using NUSB.Controller;
 using Burro;
 using Burro.Util;
 using System.Threading;
+using System.IO;
 
 namespace Luces
 {
@@ -50,13 +51,21 @@ namespace Luces
 
             _core = _kernel.Get<LucesCore>();
 
-            if (args.Any())
+            try
             {
-                _core.Initialise(args[0]);
+                if (args.Any())
+                {
+                    _core.Initialise(args[0]);
+                }
+                else
+                {
+                    _core.Initialise();
+                }
             }
-            else
+            catch (Exception)
             {
-                _core.Initialise();
+                _core.Shutdown();
+                throw;
             }
         }
 
@@ -85,7 +94,6 @@ namespace Luces
             // Program
             // 
             this.ServiceName = "Luces";
-
         }
     }
 }
