@@ -77,7 +77,11 @@ namespace Luces.Tests
             }
 
             var core = _kernel.Get<LucesCore>();
-            core.Initialise();
+            try
+            {
+                core.Initialise();
+            }
+            catch (FileLoadException e) {}
             
             // make sure the file is there
             Assert.IsTrue(File.Exists(fileName));
