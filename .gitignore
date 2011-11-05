@@ -4,3 +4,5 @@
 packages/*
 *.CAB
 *.exe
+*/Release
+*/Debug
