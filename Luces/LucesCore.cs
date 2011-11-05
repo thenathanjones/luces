@@ -9,6 +9,8 @@ using Ninject;
 using Burro.Parsers;
 using Luces.Lights;
 using NUSB.Controller;
+using System.IO;
+using System.Reflection;
 
 namespace Luces
 {
@@ -48,7 +50,42 @@ namespace Luces
             }
             var configPath = baseDir + "/luces.yml";
 
+            EnsureConfigExists(configPath);
+
             Initialise(configPath);
+        }
+
+        private void EnsureConfigExists(string configPath)
+        {
+            if (!File.Exists(configPath))
+            {
+                var resourceAssembly = Assembly.GetExecutingAssembly();
+                var defaultConfig = resourceAssembly.GetManifestResourceStream("Luces.luces.yml");
+                WriteStreamToFile(defaultConfig, configPath);
+            }
+        }
+
+        private void WriteStreamToFile(Stream stream, string fileName)
+        {
+            var outputFile = new FileStream(fileName, FileMode.Create);
+
+            try
+            {
+                var length = 256;
+                var buffer = new Byte[length];
+
+                var bytesRead = stream.Read(buffer, 0, length);
+                while (bytesRead > 0)
+                {
+                    outputFile.Write(buffer, 0, bytesRead);
+                    bytesRead = stream.Read(buffer, 0, length);
+                }
+            }
+            finally
+            {
+                stream.Close();
+                outputFile.Close();
+            }
         }
 
         public void Initialise(string configFile)

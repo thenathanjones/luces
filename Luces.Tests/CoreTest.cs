@@ -13,6 +13,7 @@ using Burro.Util;
 using Burro.BuildServers;
 using Burro.Parsers;
 using System.Collections;
+using System.IO;
 
 namespace Luces.Tests
 {
@@ -62,6 +63,24 @@ namespace Luces.Tests
             core.Initialise();
             Assert.AreEqual(2, core.Lights.Count());
             Assert.IsInstanceOf<ILight>(core.Lights.First());
+        }
+        
+        [Test]
+        public void CreatesConfigFileIfNotPresent()
+        {
+            var fileName = "./luces.yml";
+
+            // make sure file doesn't exist
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            var core = _kernel.Get<LucesCore>();
+            core.Initialise();
+            
+            // make sure the file is there
+            Assert.IsTrue(File.Exists(fileName));
         }
 
         [Test]
