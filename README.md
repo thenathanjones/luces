@@ -17,7 +17,7 @@ Pre-requisites
 I've built Luces as a .NET 4 project, so the runtime will need to be installed.
 Installation
 ------------
-Simplest way to get started is to grab the installer from [HERE](https://github.com/thenathanjones/luces/blob/master/Luces.Installer/Release/Luces.Installer.msi) which is the latest one I've bothered to produce.  
+Simplest way to get started is to grab the installer from [HERE](https://github.com/downloads/thenathanjones/luces/Luces.Installer.msi) which is the latest one I've bothered to produce.  
 Or, if you're feeling up for it, grab the whole lot and build it yourself.  The dependencies are managed by NuGet, and for the moment it's a .NET 4 project, although it's quite possible it will work on earlier versions of the framework.
 Configuration
 -------------
