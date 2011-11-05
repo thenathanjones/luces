@@ -25,6 +25,11 @@ namespace Luces.Lights
             _controller.Initialise(devicePath, false);
         }
 
+        public void Disconnect()
+        {
+            _controller.Disconnect();
+        }
+
         public void Unknown()
         {
             ChangeColor(LightColor.White);

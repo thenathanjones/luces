@@ -16,5 +16,7 @@ namespace Luces.Lights
         void Failure();
 
         void Initialise(string devicePath);
+
+        void Disconnect();
     }
 }

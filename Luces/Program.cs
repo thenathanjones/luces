@@ -76,6 +76,7 @@ namespace Luces
         {
             base.OnStop();
 
+            _core.Shutdown();
         }
     }
 }

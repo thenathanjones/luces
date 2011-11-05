@@ -33,5 +33,9 @@ namespace Luces.Lights
             
         }
 
+        public void Disconnect()
+        {
+            
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Luces
     {
         public static IList<LightConfig> KnownLightTypes = new List<LightConfig> 
         {
-            new LightConfig() {Name = "DelcomV2", Guid = DeviceGuid.HID, VendorId = "0FC5", ProductId = "B080"} 
+            new LightConfig() {Name = "DelcomV2", Guid = DeviceGuid.HID, VendorId = "0FC5", ProductId = "B080"},
         };
     }
 

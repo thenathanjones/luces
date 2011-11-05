@@ -130,5 +130,13 @@ namespace Luces
                 }
             }
         }
+
+        public void Shutdown()
+        {
+            foreach (var light in Lights)
+            {
+                light.Disconnect();
+            }
+        }
     }
 }

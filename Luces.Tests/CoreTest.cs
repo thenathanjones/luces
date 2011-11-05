@@ -184,5 +184,16 @@ namespace Luces.Tests
             Assert.AreEqual(1, core.Lights.Count());
             Assert.IsInstanceOf<TestLight>(core.Lights.First());
         }
+
+        [Test]
+        public void ShutdownDisconnectsLights()
+        {
+            var core = _kernel.Get<LucesCore>();
+            core.Initialise();
+
+            _light.Verify(l => l.Disconnect(), Times.Never());
+            core.Shutdown();
+            _light.Verify(l => l.Disconnect(), Times.Once());
+        }
     }
 }
