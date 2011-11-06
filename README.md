@@ -26,7 +26,7 @@ Here is an example config:
 
      # Configuration file for Luces build light tool
      -
-       servertype: Go
+       servertype: CruiseControl
        url: http://10.1.1.2:8153/go/cctray.xml
        username: 
        password: 
