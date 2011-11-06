@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Luces.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("thenathanjones")]
 [assembly: AssemblyProduct("Luces.Tests")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright (c) 2011 Nathan Jones (https://github.com/thenathanjones)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
