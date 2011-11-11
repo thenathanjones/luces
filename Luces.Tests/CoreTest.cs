@@ -14,6 +14,8 @@ using Burro.BuildServers;
 using Burro.Parsers;
 using System.Collections;
 using System.IO;
+using System.Security.AccessControl;
+using System.Reflection;
 
 namespace Luces.Tests
 {
@@ -30,6 +32,8 @@ namespace Luces.Tests
         private PipelineReport SUCCESSFUL_BUILDING_PIPELINE = new PipelineReport() {BuildState = BuildState.Success, Activity = Activity.Busy};
         private PipelineReport FAILED_BUILDING_PIPELINE = new PipelineReport() {BuildState = BuildState.Failure, Activity = Activity.Busy};
 
+        private string DEFAULT_CONFIG_FILE = "./luces.yml";
+
         [SetUp]
         public void Setup()
         {
@@ -40,6 +44,12 @@ namespace Luces.Tests
             _kernel.Bind<IBurroCore>().ToConstant(_burro.Object);
             _light = new Mock<ILight>();
             _kernel.Bind<ILight>().ToConstant(_light.Object);
+
+            // make sure there is always a config file for testing
+            if (!File.Exists(DEFAULT_CONFIG_FILE))
+            {
+                File.Copy("Config/mock.yml", DEFAULT_CONFIG_FILE, true);
+            }
 
             LightConstants.KnownLightTypes.Clear();
             LightConstants.KnownLightTypes.Add(new LightConfig() { Name = "I" });
@@ -64,27 +74,32 @@ namespace Luces.Tests
             Assert.AreEqual(2, core.Lights.Count());
             Assert.IsInstanceOf<ILight>(core.Lights.First());
         }
-        
-        [Test]
-        public void CreatesConfigFileIfNotPresent()
-        {
-            var fileName = "./luces.yml";
 
-            // make sure file doesn't exist
-            if (File.Exists(fileName))
+        [Test]
+        public void CreatesConfigFileEditableByAllUsersIfNotPresent()
+        {
+            if (File.Exists(DEFAULT_CONFIG_FILE))
             {
-                File.Delete(fileName);
+                File.Delete(DEFAULT_CONFIG_FILE);
             }
 
             var core = _kernel.Get<LucesCore>();
             try
             {
                 core.Initialise();
+                Assert.Fail("This should have thrown an exception to force it to close");
             }
-            catch (FileLoadException e) {}
-            
-            // make sure the file is there
-            Assert.IsTrue(File.Exists(fileName));
+            catch (FileLoadException e) { }
+
+            Assert.IsTrue(File.Exists(DEFAULT_CONFIG_FILE));
+
+            var fileSecurity = File.GetAccessControl(DEFAULT_CONFIG_FILE);
+            var accessRules = fileSecurity.GetAccessRules(true, false, typeof(System.Security.Principal.NTAccount)).Cast <FileSystemAccessRule>();
+            accessRules.First(r => r.AccessControlType == AccessControlType.Allow && 
+                              (r.FileSystemRights & FileSystemRights.Write) == FileSystemRights.Write &&
+                              r.IdentityReference.Value == "BUILTIN\\Users");
+
+            File.Delete(DEFAULT_CONFIG_FILE);
         }
 
         [Test]
@@ -92,15 +107,15 @@ namespace Luces.Tests
         {
             var core = _kernel.Get<LucesCore>();
             core.Initialise();
-            _burro.Verify(b => b.Initialise("./luces.yml"), Times.Once());
+            _burro.Verify(b => b.Initialise(DEFAULT_CONFIG_FILE), Times.Once());
         }
 
         [Test]
         public void InitialisationAllowsConfigPassedIn()
         {
             var core = _kernel.Get<LucesCore>();
-            core.Initialise("file2.yml");
-            _burro.Verify(b => b.Initialise("file2.yml"), Times.Once());
+            core.Initialise("test2.yml");
+            _burro.Verify(b => b.Initialise("test2.yml"), Times.Once());
         }
 
         [Test]

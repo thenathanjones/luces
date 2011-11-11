@@ -11,6 +11,7 @@ using Luces.Lights;
 using NUSB.Controller;
 using System.IO;
 using System.Reflection;
+using System.Security.AccessControl;
 
 namespace Luces
 {
@@ -63,8 +64,17 @@ namespace Luces
                 var defaultConfig = resourceAssembly.GetManifestResourceStream("Luces.Config.luces.yml");
                 WriteStreamToFile(defaultConfig, configPath);
 
+                GiveWriteAccessToUsers(configPath);
+
                 throw new FileLoadException("No config file found.  Put default at " + configPath);
             }
+        }
+
+        private void GiveWriteAccessToUsers(string configPath)
+        {
+            var fileSecurity = File.GetAccessControl(configPath);
+            fileSecurity.AddAccessRule(new FileSystemAccessRule("BUILTIN\\Users", FileSystemRights.Write, AccessControlType.Allow));
+            File.SetAccessControl(configPath, fileSecurity);
         }
 
         private void WriteStreamToFile(Stream stream, string fileName)
