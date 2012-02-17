@@ -1,6 +1,6 @@
 What is it?
 ===========
-Luces is a .NET Windows service for setting up build lights, using standard Windows API calls.
+Luces is a .NET Windows service for setting up a build light, using standard Windows API calls via [NUSB](https://github.com/thenathanjones/nusb).
 
 Why do this?
 ============
